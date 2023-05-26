@@ -89,9 +89,8 @@ const getNbaGameState = (gameStats) => {
     } else {
         // the example is a completed game, so not sure how the in progress/pregame data looks
         // just a small snippet to show I thought about other cases
-        periods = gameStats.home_period_scores.length + " period";
+        return gameStats.home_period_scores.length + " period";
     }
-    return "Unknown";
 }
 
 // this would be in an "MLB" VM class that would handle all things MLB VM related
@@ -101,9 +100,8 @@ const getMlbGameState = (gameStats) => {
     } else {
         // the example is a completed game, so not sure how the in progress/pregame data looks
         // just a small snippet to show I thought about other cases
-        periods = gameStats.home_period_scores.length + " inning";
+        return gameStats.home_period_scores.length + " inning";
     }
-    return "Unknown";
 }
 
 export default getScoreboard
