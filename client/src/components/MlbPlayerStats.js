@@ -4,7 +4,7 @@ import '../css/App.css';
 function MlbPlayerStats({gameStats}) {
     
     function getPitcherStats(pitchingStats) {
-        let headers = [
+        const headers = [
             <div key="-1" className="player-stat-line-header">
                 <div className="player-name">
                 </div>
@@ -32,7 +32,7 @@ function MlbPlayerStats({gameStats}) {
     }
 
     function getBatterStats(batterStats) {
-        let headers = [
+        const headers = [
             <div key="-1" className="player-stat-line-header">
                 <div className="player-name">
                 </div>
@@ -60,7 +60,7 @@ function MlbPlayerStats({gameStats}) {
     }
 
     function getErrors(fieldingStats) {
-        let errors = [];
+        const errors = [];
         fieldingStats.forEach(stat => {
             if (stat.errors > 0) {
                 errors.push(`${stat.display_name} (${stat.errors})`)

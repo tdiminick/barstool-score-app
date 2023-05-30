@@ -2,6 +2,8 @@ import getGameStats from "../services/gameService.js";
 
 const getScoreboard = async (req, res, next) => {
     console.log("req(get scoreboard): ");
+    
+    // this would be done with a query instead of a list passed in
     const gamesToDisplay = [
         "6c974274-4bfc-4af8-a9c4-8b926637ba74",
         "eed38457-db28-4658-ae4f-4d4d38e9e212",
@@ -24,24 +26,24 @@ const getScoreboard = async (req, res, next) => {
 const buildScoreboard = async (db, gamesToDisplay) => {
     // presumably this would be by date, you could do that by accepting a date parameter and looking up games by
     // that date. since I was just given the two games, I just made a generic game lookup method that would look
-    // up any games in the format given in the readme.
-    let games = await Promise.all(gamesToDisplay.map(async (gameId) =>
+    // up any games in the list above.
+    const games = await Promise.all(gamesToDisplay.map(async (gameId) =>
         getScoreboardInfo(gameId, await getGameStats(gameId, db))
     ));
-    let scoreboardDict = {};
 
-    // loop through games, push into arrays based on league
+    // loop through games, push into {league, []} dict, where each entry is the league name and then the array of scores to display
+    const leagueScoresDict = {};
     games.forEach(g => {
-        if (!scoreboardDict[g.league]) {
-            scoreboardDict[g.league] = [];
+        if (!leagueScoresDict[g.league]) {
+            leagueScoresDict[g.league] = [];
         }
-        scoreboardDict[g.league].push(g);
+        leagueScoresDict[g.league].push(g);
     });
     // create VM -> returns a list of objects
-    // { league: 'X', scores: [] } scores is the array of scores for each league
-    let scoreboardVM = [];
-    for (let sb in scoreboardDict) {
-        scoreboardVM.push({ league: sb, scores: scoreboardDict[sb] });
+    // { league: 'sb', scores: [] } scores is the array of scores for each league
+    const scoreboardVM = [];
+    for (let key in leagueScoresDict) {
+        scoreboardVM.push({ league: key, scores: leagueScoresDict[key] });
     }
     return scoreboardVM;
 }
@@ -65,7 +67,8 @@ const getMlbScoreboardInfo = (gameId, gameStats) => {
         "home_team": gameStats.home_team.abbreviation,
         "away_team_score": gameStats.away_batter_totals.runs,
         "home_team_score": gameStats.home_batter_totals.runs,
-        "game_state": getMlbGameState(gameStats)
+        "game_state": getMlbGameState(gameStats),
+        "game_date": gameStats.event_information.start_date_time
     }
 }
 
@@ -78,7 +81,8 @@ const getNbaScoreboardInfo = (gameId, gameStats) => {
         "home_team": gameStats.home_team.abbreviation,
         "away_team_score": gameStats.away_totals.points,
         "home_team_score": gameStats.home_totals.points,
-        "game_state": getNbaGameState(gameStats)
+        "game_state": getNbaGameState(gameStats),
+        "game_date": gameStats.event_information.start_date_time
     }
 }
 

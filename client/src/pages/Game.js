@@ -8,7 +8,7 @@ import NbaPlayerStats from '../components/NbaPlayerStats';
 import MlbPlayerStats from "../components/MlbPlayerStats";
 
 function Game() {
-    let { game_id } = useParams();
+    const { game_id } = useParams();
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {

@@ -3,10 +3,10 @@ import '../css/App.css';
 
 function Boxscore({gameStats}) {
 
-    let boxscoreHeaders = [""];
-    let awayLine = [gameStats.away_team.abbreviation]
-    let homeLine = [gameStats.home_team.abbreviation]
-    let finalScoreIndex = 0;
+    const boxscoreHeaders = [""];
+    const awayLine = [gameStats.away_team.abbreviation]
+    const homeLine = [gameStats.home_team.abbreviation]
+    let finalScoreIndex;
 
     // fill in headers/away scores
     gameStats.away_period_scores.forEach((s, idx) => {
@@ -44,16 +44,19 @@ function Boxscore({gameStats}) {
         homeLine.push("Final"); // would be the period/game state (only know what completed look like)
     }
 
-    const getClassNameForCell = (idx, abbr, lastIndex) => {
+    const getClassNameForCell = (idx, abbr, boldColumnList) => {
         // check if start index - use abbr for class name to color cell
         if (idx === 0) {
             return `${abbr} bold`;
         }
 
         // check if index is the final score or last column
-        if (idx === finalScoreIndex || idx === lastIndex) {
+        if (boldColumnList.includes(idx)) {
             return "bold";
         }
+        // if (idx === finalScoreIndex || idx === lastIndex) {
+        //     return "bold";
+        // }
     }
 
     return (
@@ -69,12 +72,12 @@ function Boxscore({gameStats}) {
             <tbody>
             <tr>
                 {awayLine.map((a, idx) => (
-                    <td className={getClassNameForCell(idx, a, awayLine.length - 1)} key={idx}>{a}</td>
+                    <td className={getClassNameForCell(idx, a, [awayLine.length - 1, finalScoreIndex])} key={idx}>{a}</td>
                 ))}
             </tr>
             <tr>
                 {homeLine.map((h, idx) => (
-                    <td className={getClassNameForCell(idx, h, homeLine.length - 1)} key={idx}>{h}</td>
+                    <td className={getClassNameForCell(idx, h, [homeLine.length - 1, finalScoreIndex])} key={idx}>{h}</td>
                 ))}
             </tr>
             </tbody>

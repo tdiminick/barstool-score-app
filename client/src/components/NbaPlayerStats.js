@@ -4,7 +4,7 @@ import '../css/App.css';
 function NbaPlayerStats({gameStats}) {
     
     function getTeamStats(stats) {
-        let headers = [
+        const headers = [
             <div className="player-stat-line-header">
                 <div className="player-name">
                 </div>

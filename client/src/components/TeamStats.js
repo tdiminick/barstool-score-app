@@ -1,9 +1,11 @@
 import React from "react";
 import '../css/App.css';
+import { humanize } from "../utils";
 
 function TeamStats({gameStats}) {
     // this could be a user preference, or standard from us, etc
-    let statsToDisplay, awayStats = {}, homeStats = {};
+    let statsToDisplay;
+    const awayStats = {}, homeStats = {};
     if (gameStats.league === "MLB") {
         statsToDisplay = ["runs", "plate_appearances", "at_bats", "hits", "singles", "doubles", "triples", "home_runs", "walks", "strike_outs"]
         statsToDisplay.forEach(stat => {
@@ -17,15 +19,6 @@ function TeamStats({gameStats}) {
             homeStats[stat] = gameStats.home_totals[stat];
         });
     }
-
-    // would put this is some sort of utility file/class in a larger environment
-    function humanize(str) {
-        var i, frags = str.split('_');
-        for (i=0; i<frags.length; i++) {
-          frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
-        }
-        return frags.join(' ');
-      }
 
     return ( 
         <div className="teamstats-container">
